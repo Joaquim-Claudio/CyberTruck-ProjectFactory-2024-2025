@@ -1,0 +1,4 @@
+MQTT Broker Authentication:
+Credentials:
+ - username: cybertruck-mqtt-user
+ - password: Cybertruck-mqtt-passw0rd
