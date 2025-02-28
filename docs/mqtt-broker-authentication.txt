@@ -1,4 +1,6 @@
 MQTT Broker Authentication:
 Credentials:
+ - broker: 9b6eee11960f44d39f52cd73134c6651.s1.eu.hivemq.cloud
+ - port: 8883
  - username: cybertruck-mqtt-user
  - password: Cybertruck-mqtt-passw0rd
