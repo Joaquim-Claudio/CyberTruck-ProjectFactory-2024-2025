@@ -1,0 +1,297 @@
+[
+    {
+        "id": "8356159f5bb7d86d",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "32bc7ad725f7635f",
+        "type": "ui_tab",
+        "name": "Demo",
+        "icon": "dashboard",
+        "disabled": true,
+        "hidden": false
+    },
+    {
+        "id": "d87f8fa4e1dc6f8d",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "da857a176b219626",
+        "type": "ui_group",
+        "name": "Button",
+        "tab": "32bc7ad725f7635f",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "20e0fb6cfd9d54e2",
+        "type": "ui_tab",
+        "name": "teste",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "4d25cba5cc729338",
+        "type": "ui_group",
+        "name": "Teste1",
+        "tab": "20e0fb6cfd9d54e2",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a1b84a68aa412a1a",
+        "type": "http in",
+        "z": "8356159f5bb7d86d",
+        "name": "",
+        "url": "/test",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "4d624dc5f899bfad"
+            ]
+        ]
+    },
+    {
+        "id": "4d624dc5f899bfad",
+        "type": "template",
+        "z": "8356159f5bb7d86d",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html>\n<head>\n<style>\nbody {\n  margin-left: 200px;\n  background: #5d9ab2 url(\"img_tree.png\") no-repeat top left;\n}\n\n.center_div {\n  border: 1px solid gray;\n  margin-left: auto;\n  margin-right: auto;\n  width: 90%;\n  background-color: #d0f0f6;\n  text-align: left;\n  padding: 8px;\n}\n</style>\n</head>\n<body>\n\n<div class=\"center_div\">\n  <h1>Hello World!</h1>\n  <p>This example contains some advanced CSS methods you may not have learned yet. But, we will explain these methods in a later chapter in the tutorial.</p>\n</div>\n\n</body>\n</html>",
+        "output": "str",
+        "x": 400,
+        "y": 120,
+        "wires": [
+            [
+                "8b4b4131b9b4ca83"
+            ]
+        ]
+    },
+    {
+        "id": "8b4b4131b9b4ca83",
+        "type": "http response",
+        "z": "8356159f5bb7d86d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "8ed4f1d415518e9b",
+        "type": "ui_gauge",
+        "z": "8356159f5bb7d86d",
+        "name": "",
+        "group": "4d25cba5cc729338",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 510,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "2e92d16f028db5e2",
+        "type": "inject",
+        "z": "8356159f5bb7d86d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "15",
+        "payloadType": "num",
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "8ed4f1d415518e9b"
+            ]
+        ]
+    },
+    {
+        "id": "f30cb36dae384c68",
+        "type": "ui_button",
+        "z": "8356159f5bb7d86d",
+        "name": "",
+        "group": "4d25cba5cc729338",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "button",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 290,
+        "y": 340,
+        "wires": [
+            [
+                "5926f83b7d46b89e"
+            ]
+        ]
+    },
+    {
+        "id": "5926f83b7d46b89e",
+        "type": "ui_text",
+        "z": "8356159f5bb7d86d",
+        "group": "4d25cba5cc729338",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "text",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 470,
+        "y": 340,
+        "wires": []
+    }
+]
