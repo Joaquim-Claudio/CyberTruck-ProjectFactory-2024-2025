@@ -33,7 +33,7 @@ VALUES
 INSERT INTO Metrics (value, sensor_id)
 VALUES
 	  ('35.50', (SELECT id FROM Sensor WHERE serial_number = 'HC-SR04-01')),
-	  ('28.00', (SELECT id FROM Sensor WHERE serial_number = 'MPU6050-01' AND name = 'Acelerómetro')),
+	  ('8.50', (SELECT id FROM Sensor WHERE serial_number = 'MPU6050-01' AND name = 'Acelerómetro')),
 	  ('99.25', (SELECT id FROM Sensor WHERE serial_number = 'ACS712-01')),
-	  ('8.50', (SELECT id FROM Sensor WHERE serial_number = 'MPU6050-01' AND name = 'Giroscópio')),
+	  ('28.00', (SELECT id FROM Sensor WHERE serial_number = 'MPU6050-01' AND name = 'Giroscópio')),
 	  ('0', (SELECT id FROM Sensor WHERE serial_number = 'TRCT-5000-01'));
