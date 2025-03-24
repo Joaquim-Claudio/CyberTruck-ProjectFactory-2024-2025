@@ -30,11 +30,11 @@ void setup() {
     Serial.begin(9600);
     Serial.println("\nSerial communication initialized.");
 
-    Serial.println("Setting up WiFi conection...");
+    Serial.print("Setting up WiFi conection...");
     wifi_setup();
 
-    Serial.println("Setting up MQTT configuration...");
-    wifi_setup();
+    Serial.print("Setting up MQTT configuration...");
+    mqtt_setup();
 
     move.Stop();
 }
