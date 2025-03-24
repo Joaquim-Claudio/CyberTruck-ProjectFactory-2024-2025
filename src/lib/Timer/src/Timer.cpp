@@ -4,6 +4,7 @@
 Timer::Timer(){}
 
 Timer::Timer(unsigned long period) {
+    _start = millis();
     _period = period;
 }
 

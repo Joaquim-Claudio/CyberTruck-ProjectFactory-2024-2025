@@ -1,25 +1,49 @@
 #include <Arduino.h>
-#include "../lib/MoveController/MoveController.h"
-#include "../lib/Pinout/Pinout.h"
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <PubSubClient.h>
+#include "Motor.h"
+#include "MoveController.h"
+#include "Pinout.h"
+#include "Param.h"
+#include "Timer.h"
+#include "vehicle.pb.h"
+#include "pb_decode.h"
 
-#define MOTOR_DEFAULT_SPEED 225
-
-const uint8_t motor_right_channel = 0;
-const uint8_t motor_left_channel = 1;
-
-Motor motor_right(Pinout::MOTOR_RIGHT_PIN1, Pinout::MOTOR_RIGHT_PIN2, Pinout::MOTOR_RIGHT_EN, motor_right_channel);
-Motor motor_left(Pinout::MOTOR_LEFT_PIN1, Pinout::MOTOR_LEFT_PIN2, Pinout::MOTOR_LEFT_EN, motor_left_channel);
+Motor motor_right(Pinout::MOTOR_RIGHT_PIN1, Pinout::MOTOR_RIGHT_PIN2, Pinout::MOTOR_RIGHT_EN, Param::MOTOR_RIGHT_CHANNEL);
+Motor motor_left(Pinout::MOTOR_LEFT_PIN1, Pinout::MOTOR_LEFT_PIN2, Pinout::MOTOR_LEFT_EN, Param::MOTOR_LEFT_CHANNEL);
 
 MoveController move(motor_right, motor_left);
 
+
+WiFiClientSecure wifiClient;
+PubSubClient mqttClient(wifiClient);
+
+// Method declarations
+void wifi_setup();
+void mqtt_setup();
+void mqtt_reconnect();
+void mqtt_handle_msg(char*, byte*, unsigned int);
+
+
 void setup() {
     Serial.begin(9600);
-    Serial.println("\nComunicação serial inicializada.");
+    Serial.println("\nSerial communication initialized.");
+
+    Serial.println("Setting up WiFi conection...");
+    wifi_setup();
+
+    Serial.println("Setting up MQTT configuration...");
+    wifi_setup();
 
     move.Stop();
 }
 
 void loop() {
+
+    if(!mqttClient.connected()){
+        mqtt_reconnect();
+    }
 
     while(Serial.available()) {
 
@@ -30,7 +54,7 @@ void loop() {
         String cmd = strtok(buffer, " ");
         String instruction = strtok(NULL, " ");
 
-        int speed = MOTOR_DEFAULT_SPEED;
+        int speed = Param::MOTOR_DEFAULT_SPEED;
 
         Serial.print("Entrada: ");
         Serial.println(line);
@@ -41,47 +65,98 @@ void loop() {
 
                 move.MoveForward(speed);
                 Serial.println("Moving forward.");
-
-                delay(2000);
-                move.Stop();
             }
 
             else if(instruction.equalsIgnoreCase("--back")) {
 
                 move.MoveBackward(speed);
                 Serial.println("Moving backward.");
-                
-                delay(2000);
-                move.Stop();
             }
 
             else if(instruction.equalsIgnoreCase("--left")) {
                 move.TurnLeft(speed);
                 Serial.println("Turning left.");
-                
-                delay(2000);
-                move.Stop();
             }
 
             else if(instruction.equalsIgnoreCase("--right")) {
                 move.TurnRight(speed);
                 Serial.println("Turning right.");
-                
-                delay(2000);
-                move.Stop();
             }
 
             else if(instruction.equalsIgnoreCase("--stop")) {
-                move.Stop();
                 Serial.println("Stopped.");
-                
-                delay(2000);
-                move.Stop();
             }
 
             else {
                 Serial.println("Instrução inválida.");
             }
+
+            move.Stop();
         }
+    }
+}
+
+void wifi_setup() {
+    WiFi.mode(WIFI_STA);
+
+    WiFi.begin(Param::WIFI_SSID, Param::WIFI_PASSWORD);
+    while(WiFi.status() != WL_CONNECTED) {
+        delay(200);
+        Serial.print(".");
+    }
+
+    wifiClient.setInsecure();
+
+    Serial.println("done");
+    Serial.print("IPv4:\t");
+    Serial.println(WiFi.localIP());
+}
+
+void mqtt_setup() {
+    mqttClient.setServer(Param::MQTT_BROKER_ADDRESS, Param::MQTT_PORT);
+    mqttClient.setCallback(mqtt_handle_msg);
+    Serial.println("done");
+}
+
+void mqtt_reconnect() {
+    Serial.print("Trying connection to MQTT Broker...");
+    String clientID = "esp32-client-" + WiFi.macAddress();
+
+    Timer timer(5000);
+
+    while(!mqttClient.connected()) {
+
+        if(timer.overlapsed()) {
+            Serial.println("Connection attempt timed out.");
+            return;
+        }
+
+        mqttClient.connect(clientID.c_str(), Param::MQTT_USERNAME, Param::MQTT_PASSWORD);
+        delay(100);
+        Serial.print(".");
+    }
+
+    Serial.println("done");
+    mqttClient.subscribe(Param::DRIVE_TOPIC);
+}
+
+void mqtt_handle_msg(char* topic, byte* payload, unsigned int msg_size) {
+    Serial.print("A message arrived on topic: \"");
+    Serial.print(topic);
+    Serial.println("\". Deserializing...");
+    
+    String message = "";
+    for(int i=0; i<msg_size; i++) {
+        message += (char) payload[i];
+    }
+
+    VehicleCommand command;
+    pb_istream_t stream = pb_istream_from_buffer(payload, msg_size);
+
+    if(pb_decode(&stream, VehicleCommand_fields, &command)) {
+        Serial.print("Actuator: ");
+        Serial.println(command.actuator);
+    } else {
+        Serial.println("Deserialization failed.");
     }
 }

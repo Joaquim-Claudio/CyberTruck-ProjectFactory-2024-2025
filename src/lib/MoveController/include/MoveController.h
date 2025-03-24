@@ -1,7 +1,7 @@
-#ifndef MoveController_h
-#define MoveController_h
+#ifndef MOVE_CONTROLLER_H
+#define MOVE_CONTROLLER_H
 #include "Arduino.h"
-#include "../Motor/Motor.h"
+#include "Motor.h"
 
 class MoveController {
     public:
