@@ -1,9 +1,10 @@
 syntax = "proto3";
 
+# Vehicle Protobuf definition
 message VehicleCommand {
-    int32 vehicle_id = 1;
-    int32 agent_id = 2;
-    string action = 3;
-    string cmd = 4;
-    int32 value = 5;
+    required string vehicleId = 1;
+    required string agentId = 2;
+    required string action = 3;
+    required string cmd = 4;
+    optional int32 value = 5;
 }

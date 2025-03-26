@@ -11,6 +11,7 @@ class Timer {
         Timer(unsigned long period);
 
         bool overlapsed();
+        void reset();
 };
 
 #endif

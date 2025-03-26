@@ -12,3 +12,7 @@ bool Timer::overlapsed() {
     _current = millis();
     return _current - _start >= _period;
 }
+
+void Timer::reset() {
+    _start = millis();
+}

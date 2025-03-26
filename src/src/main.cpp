@@ -2,41 +2,45 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <PubSubClient.h>
+#include <ArduinoJson.h>
 #include "Motor.h"
 #include "MoveController.h"
 #include "Pinout.h"
 #include "Param.h"
 #include "Timer.h"
-#include "vehicle.pb.h"
-#include "pb_decode.h"
+#include "VehicleCommand.h"
 
 Motor motor_right(Pinout::MOTOR_RIGHT_PIN1, Pinout::MOTOR_RIGHT_PIN2, Pinout::MOTOR_RIGHT_EN, Param::MOTOR_RIGHT_CHANNEL);
 Motor motor_left(Pinout::MOTOR_LEFT_PIN1, Pinout::MOTOR_LEFT_PIN2, Pinout::MOTOR_LEFT_EN, Param::MOTOR_LEFT_CHANNEL);
 
-MoveController move(motor_right, motor_left);
-
+MoveController driver(motor_right, motor_left);
 
 WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
+
+JsonDocument jsonDocument;
+VehicleCommand vehicleCommand;
+
+Timer remoteCommandTimer(200);
 
 // Method declarations
 void wifi_setup();
 void mqtt_setup();
 void mqtt_reconnect();
 void mqtt_handle_msg(char*, byte*, unsigned int);
-
+void driverController();
 
 void setup() {
     Serial.begin(9600);
-    Serial.println("\nSerial communication initialized.");
+    Serial.println("\nSerial communication initialized");
 
-    Serial.print("Setting up WiFi conection...");
+    Serial.print("Setting up WiFi conNection...");
     wifi_setup();
 
     Serial.print("Setting up MQTT configuration...");
     mqtt_setup();
 
-    move.Stop();
+    driver.Stop();
 }
 
 void loop() {
@@ -45,54 +49,10 @@ void loop() {
         mqtt_reconnect();
     }
 
-    while(Serial.available()) {
+    mqttClient.loop();
 
-        String line = Serial.readStringUntil('\n');
-        char buffer[line.length()];
-        line.toCharArray(buffer, line.length());
-
-        String cmd = strtok(buffer, " ");
-        String instruction = strtok(NULL, " ");
-
-        int speed = Param::MOTOR_DEFAULT_SPEED;
-
-        Serial.print("Entrada: ");
-        Serial.println(line);
-
-
-        if(cmd.equalsIgnoreCase("move")) {
-            if(instruction.equalsIgnoreCase("--front")) {
-
-                move.MoveForward(speed);
-                Serial.println("Moving forward.");
-            }
-
-            else if(instruction.equalsIgnoreCase("--back")) {
-
-                move.MoveBackward(speed);
-                Serial.println("Moving backward.");
-            }
-
-            else if(instruction.equalsIgnoreCase("--left")) {
-                move.TurnLeft(speed);
-                Serial.println("Turning left.");
-            }
-
-            else if(instruction.equalsIgnoreCase("--right")) {
-                move.TurnRight(speed);
-                Serial.println("Turning right.");
-            }
-
-            else if(instruction.equalsIgnoreCase("--stop")) {
-                Serial.println("Stopped.");
-            }
-
-            else {
-                Serial.println("Instrução inválida.");
-            }
-
-            move.Stop();
-        }
+    if(remoteCommandTimer.overlapsed()) {
+        driver.Stop();
     }
 }
 
@@ -150,13 +110,38 @@ void mqtt_handle_msg(char* topic, byte* payload, unsigned int msg_size) {
         message += (char) payload[i];
     }
 
-    VehicleCommand command;
-    pb_istream_t stream = pb_istream_from_buffer(payload, msg_size);
+    Serial.println(message);
 
-    if(pb_decode(&stream, VehicleCommand_fields, &command)) {
-        Serial.print("Actuator: ");
-        Serial.println(command.actuator);
-    } else {
+    jsonDocument.clear();
+    DeserializationError error = deserializeJson(jsonDocument, payload, msg_size);
+
+    if(error) {
         Serial.println("Deserialization failed.");
+    }
+
+    vehicleCommand.vehicleId = jsonDocument["vehicleId"].as<String>();
+    vehicleCommand.agentId = jsonDocument["agentId"].as<String>();
+    vehicleCommand.action = jsonDocument["action"].as<String>();
+    vehicleCommand.cmd = jsonDocument["cmd"].as<String>();
+    vehicleCommand.value = jsonDocument["value"].as<int>();
+
+    Serial.println(vehicleCommand.vehicleId);
+    Serial.println(vehicleCommand.agentId);
+    Serial.println(vehicleCommand.action);
+    Serial.println(vehicleCommand.cmd);
+    Serial.println(vehicleCommand.value);
+
+    remoteCommandTimer.reset();
+    driverController();
+}
+
+void driverController() {
+    if(vehicleCommand.action.equalsIgnoreCase("move")) {
+
+        if(vehicleCommand.cmd.equalsIgnoreCase("front")) driver.MoveForward(Param::MOTOR_DEFAULT_SPEED);
+        else if(vehicleCommand.cmd.equalsIgnoreCase("back")) driver.MoveBackward(Param::MOTOR_DEFAULT_SPEED);
+        else if(vehicleCommand.cmd.equalsIgnoreCase("right")) driver.TurnRight(Param::MOTOR_DEFAULT_SPEED);
+        else if(vehicleCommand.cmd.equalsIgnoreCase("left")) driver.TurnLeft(Param::MOTOR_DEFAULT_SPEED);
+
     }
 }

@@ -29,23 +29,23 @@ void Motor::stop() {
 }
 
 void Motor::forward() {
-    digitalWrite(_PIN1, LOW);
-    digitalWrite(_PIN2, HIGH);
+    digitalWrite(_PIN1, HIGH);
+    digitalWrite(_PIN2, LOW);
 }
 
 void Motor::forward(uint8_t speed) {
-    digitalWrite(_PIN1, LOW);
-    digitalWrite(_PIN2, HIGH);
+    digitalWrite(_PIN1, HIGH);
+    digitalWrite(_PIN2, LOW);
     ledcWrite(_CHANNEL, speed);
 }
 
 void Motor::backward() {
-    digitalWrite(_PIN1, HIGH);
-    digitalWrite(_PIN2, LOW);
+    digitalWrite(_PIN1, LOW);
+    digitalWrite(_PIN2, HIGH);
 }
 
 void Motor::backward(uint8_t speed) {
-    digitalWrite(_PIN1, HIGH);
-    digitalWrite(_PIN2, LOW);
+    digitalWrite(_PIN1, LOW);
+    digitalWrite(_PIN2, HIGH);
     ledcWrite(_CHANNEL, speed);
 }
