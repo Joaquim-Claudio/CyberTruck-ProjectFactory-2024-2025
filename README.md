@@ -1,4 +1,5 @@
-# CyberTruck-ProjectFactory-2024-2025
+# CyberTruck Project Factory 2024/25
+---
 # INTRODUÇÃO
 Este projeto multidisciplinar envolve a colaboração entre estudantes de Engenharia Informática e Design na conceção e desenvolvimento de um veículo autônomo ou controlado remotamente, projetado para transportar diferentes tipos de carga através de trajetos com obstáculos. O projeto denominado CyberTruck-v1 será desenvolvido por alunos do curso de engenharia informática no âmbito da cadeira Project Factory com o objetivo de desenvolver o chassis do veículo, bem como todo o engenho que garanta as componentes mecânica e elétrica/eletrónica. 
 
@@ -15,11 +16,11 @@ Fig.1 – Modelo 3D do veículo.
 **Desenvolvimento de um veículo inteligente:** O veículo deve ser capaz de transportar cargas de um ponto A (Origem) a um ponto B (Destino) através de um percurso com obstáculos e outros desafios, que ilustrem as características de um cenário do mundo real. O veículo deve ser projetado para suportar diferentes formatos de carga (esfera, cilindro, cubo, cone).
 Sensores e Atuação: O sistema deve incluir sensores e atuadores para detetar obstáculos, corrigir a trajetória e garantir a estabilidade do veículo e da carga.
 > i.	Sensores para deteção de obstáculos (Ex: ultrassônicos HC-SR04);
-
+>
 > ii.	Sensores de aceleração e inclinação para estabilidade e controlo de velocidade (MPU6050);
-
+>
 > iii.	Sensores de peso para detetar o peso total da carga a transportar;
-
+>
 > iv.	Motores DC ou Servo para movimentação e ajuste de direção.
 
 **Automação e Comunicação via rede de dados:** O sistema deve permitir o controlo absoluto do veículo via rede de dados (internet), disponibilizando um um dashboard, que implemente envio/receção de dados via MQTT. Monitoramento dos dados de sensores e envio de comandos remotos. 
@@ -48,13 +49,13 @@ Sensores e Atuação: O sistema deve incluir sensores e atuadores para detetar o
 # ARQUITETURA DO SISTEMA
 O sistema CyberTruck-v1 é composto essencialmente pelas seguintes componentes ilustradas na figura abaixo:
 > i.	MQTT Broker, responsável por mediar a transmissão de dados via MQTT. Nele se ligam os subscribers (receptores) e os publishers (emissores).
-
+>
 > ii.	Node-Red (agente remoto), o “cérebro” por trás da condução autónoma, recebe dados dos sensores do veículo e envia comandos para controlar os atuadores (através de um MQTT Broker).
-
+>
 > iii.	Base de dados para persistir algumas métricas relevantes sobre o veículo e o meio.
-
+>
 > iv.	O veículo, composto de uma série de componentes mecânicos (motores, chassis, etc.) e eletrónicos (sensores, atuadores, etc) que permitem a operação do veículo.
-
+>
 > v.	A funcionamento mínimo do sistema CyberTruck-v1 depende estritamente da ligação a uma rede dados (LAN ou internet).
 
 
