@@ -1,5 +1,0 @@
-# Vehicle Protobuf options
-VehicleCommand.vehicleId max_size:11
-VehicleCommand.agentId max_size:11
-VehicleCommand.action max_size:11
-VehicleCommand.cmd max_size:21
