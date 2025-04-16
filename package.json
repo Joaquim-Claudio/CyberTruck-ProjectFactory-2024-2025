@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-red-contrib-protobuf": "^1.1.2"
+  }
+}

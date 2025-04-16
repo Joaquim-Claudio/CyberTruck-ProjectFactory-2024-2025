@@ -172,7 +172,7 @@ module.exports = {
      * The following property can be used to specify a different root path.
      * If set to false, this is disabled.
      */
-    //httpAdminRoot: '/admin',
+    httpAdminRoot: '/editor',
 
     /** The following property can be used to add a custom middleware function
      * in front of all admin http routes. For example, to set custom http
@@ -243,11 +243,14 @@ module.exports = {
      *  Resource Sharing rules for the source. `httpStaticCors` can be used to
      *  set a default cors policy across all static routes.
      */
+    httpStatic: "/home/edja/4-projeto/CyberTruck-ProjectFactory-2024-2025/node-red/public",
     //httpStatic: [
     //    {path: '/home/nol/pics/',    root: "/img/"},
     //    {path: '/home/nol/reports/', root: "/doc/"},
     //    {path: '/home/nol/videos/',  root: "/vid/", options: {maxAge: '1d'}}
     //],
+
+
 
     /**
      * All static routes will be appended to httpStaticRoot
@@ -531,7 +534,7 @@ module.exports = {
      *  middleware:{function or array}, (req,res,next) - http middleware
      *  ioMiddleware:{function or array}, (socket,next) - socket.io middleware
      */
-    ui: { path: "ui" },
+    ui: { path: "/" },
 
     /** Colourise the console output of the debug node */
     //debugUseColors: true,
