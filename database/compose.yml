@@ -15,16 +15,16 @@ services:
       - cybertruck:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d
 
-  nodered:
-    image: nodered/node-red:latest
-    container_name: nodered
-    restart: always
-    ports:
-      - 1880:1880
-    depends_on:
-      - cybertruck-db
-    volumes:
-      - nodered_data:/data
+  # nodered:
+  #   image: nodered/node-red:latest
+  #   container_name: nodered
+  #   restart: always
+  #   ports:
+  #     - 1880:1880
+  #   depends_on:
+  #     - cybertruck-db
+  #   volumes:
+  #     - nodered_data:/data
 
 volumes:
   cybertruck:
